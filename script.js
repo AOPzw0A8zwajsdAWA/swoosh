@@ -1,95 +1,59 @@
-// Skapa användardata för fler användare
-const users = {
-    'user1': { password: 'password123', loggedIn: false, device: null },
-    'user2': { password: 'securePassword456', loggedIn: false, device: null }
-};
+// JavaScript for handling login, logout, and showing the correct UI
+document.addEventListener('DOMContentLoaded', function() {
+    const loginSection = document.getElementById('login-section');
+    const protectedSection = document.getElementById('protected-section');
+    const message = document.getElementById('message');
+    const loginBtn = document.getElementById('loginBtn');
+    const fakeFrejaBtn = document.getElementById('fakeFrejaBtn');
+    const fakeSwishBtn = document.getElementById('fakeSwishBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-let currentUser = null;  // Håller reda på om någon är inloggad
-const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000; // Månadens längd i millisekunder
+    // Simulate users and passwords
+    const validUsers = {
+        'user1': 'password1',
+        'user2': 'password2'
+    };
 
-// Hämta DOM-element
-const loginSection = document.getElementById('login-section');
-const protectedSection = document.getElementById('protected-section');
-const message = document.getElementById('message');
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const userNameDisplay = document.getElementById('user-name');
-const logoutButton = document.getElementById('logout-btn');
-
-// Kontrollera om användaren redan är inloggad från localStorage
-window.onload = function() {
-    const savedUser = localStorage.getItem('currentUser');
-    const savedLoginTime = localStorage.getItem('loginTime'); // Hämta sista inloggningstiden
-
-    if (savedUser) {
-        const currentTime = Date.now();
-        if (savedLoginTime && (currentTime - savedLoginTime) < MONTH_IN_MS) {
-            // Återställ användarstatus från localStorage om en månad inte har gått
-            users[savedUser].loggedIn = true;
-            currentUser = savedUser;
-
-            loginSection.style.display = 'none';
-            protectedSection.style.display = 'block';
-            userNameDisplay.textContent = currentUser;
-        } else {
-            // Om en månad har gått, logga ut användaren
-            logout();
-            message.textContent = 'Din inloggning har gått ut. Vänligen logga in igen.';
-            message.style.color = 'red';
-        }
-    }
-};
-
-// Funktion för att logga in
-document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault();  // Förhindra att sidan laddas om
-
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    // Kontrollera om användaren finns och lösenordet är korrekt
-    if (users[username] && users[username].password === password) {
-        if (users[username].loggedIn) {
-            message.textContent = 'Det här kontot används redan på en annan enhet.';
-            message.style.color = 'red';
-        } else {
-            users[username].loggedIn = true;
-            users[username].device = navigator.userAgent; // Identifiera enheten
-            currentUser = username;
-
-            // Spara användarens inloggning i localStorage
-            localStorage.setItem('currentUser', username);
-            localStorage.setItem('loginTime', Date.now()); // Spara inloggningstiden
-
-            loginSection.style.display = 'none';
-            protectedSection.style.display = 'block';
-            userNameDisplay.textContent = username;
-            message.textContent = '';
-        }
+    // Check if user is logged in from sessionStorage
+    if (sessionStorage.getItem('loggedIn') === 'true') {
+        showProtectedSection();
     } else {
-        message.textContent = 'Fel användarnamn eller lösenord.';
-        message.style.color = 'red';
+        showLoginSection();
     }
-});
 
-// Funktion för att logga ut
-logoutButton.addEventListener('click', function() {
-    logout();
-});
+    loginBtn.addEventListener('click', function() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-// Funktion för att logga ut användaren
-function logout() {
-    if (currentUser) {
-        users[currentUser].loggedIn = false;
-        users[currentUser].device = null;
-        currentUser = null;
+        // Validate login
+        if (validUsers[username] && validUsers[username] === password) {
+            sessionStorage.setItem('loggedIn', 'true');
+            showProtectedSection();
+        } else {
+            message.textContent = 'Fel användarnamn eller lösenord.';
+        }
+    });
 
-        // Ta bort användarens inloggning från localStorage
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('loginTime'); // Ta bort inloggningstiden
+    fakeFrejaBtn.addEventListener('click', function() {
+        alert('Fake Freja App clicked!');
+    });
 
+    fakeSwishBtn.addEventListener('click', function() {
+        alert('Fake Swish App clicked!');
+    });
+
+    logoutBtn.addEventListener('click', function() {
+        sessionStorage.removeItem('loggedIn');
+        showLoginSection();
+    });
+
+    function showLoginSection() {
         loginSection.style.display = 'block';
         protectedSection.style.display = 'none';
-        message.textContent = '';
     }
-}
+
+    function showProtectedSection() {
+        loginSection.style.display = 'none';
+        protectedSection.style.display = 'block';
+    }
+});
