@@ -52,7 +52,7 @@ body {
     height: 100vh;
     overflow: hidden;
     flex-direction: column;
-    background: linear-gradient(135deg, rgba(128, 0, 128, 0.8), rgba(0, 0, 0, 0.7));
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(49, 49, 49, 0.7));
 }
 
 #login-section, #protected-section {
