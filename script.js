@@ -1,46 +1,95 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("login-form");
-    const message = document.getElementById("message");
-    const loginSection = document.getElementById("login-section");
-    const protectedSection = document.getElementById("protected-section");
-    const logoutButton = document.getElementById("logout-button");
+// Skapa användardata för fler användare
+const users = {
+    'user1': { password: 'password123', loggedIn: false, device: null },
+    'user2': { password: 'securePassword456', loggedIn: false, device: null }
+};
 
-    // List of valid usernames and passwords
-    const validUsers = [
-        { username: "anvandare1", password: "losenord123" },
-        { username: "anvandare2", password: "losenord456" },
-        { username: "admin", password: "admin123" }
-    ];
+let currentUser = null;  // Håller reda på om någon är inloggad
+const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000; // Månadens längd i millisekunder
 
-    // Login form submission
-    loginForm.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent form from reloading the page
+// Hämta DOM-element
+const loginSection = document.getElementById('login-section');
+const protectedSection = document.getElementById('protected-section');
+const message = document.getElementById('message');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const userNameDisplay = document.getElementById('user-name');
+const logoutButton = document.getElementById('logout-btn');
 
-        const enteredUsername = document.getElementById("username").value;
-        const enteredPassword = document.getElementById("password").value;
+// Kontrollera om användaren redan är inloggad från localStorage
+window.onload = function() {
+    const savedUser = localStorage.getItem('currentUser');
+    const savedLoginTime = localStorage.getItem('loginTime'); // Hämta sista inloggningstiden
 
-        // Check if entered credentials match any valid user
-        const isValidUser = validUsers.some(user =>
-            user.username === enteredUsername && user.password === enteredPassword
-        );
+    if (savedUser) {
+        const currentTime = Date.now();
+        if (savedLoginTime && (currentTime - savedLoginTime) < MONTH_IN_MS) {
+            // Återställ användarstatus från localStorage om en månad inte har gått
+            users[savedUser].loggedIn = true;
+            currentUser = savedUser;
 
-        if (isValidUser) {
-            // Display the protected section and hide the login section
-            loginSection.style.display = "none";
-            protectedSection.style.display = "block";
-            message.textContent = ""; // Clear any previous error messages
+            loginSection.style.display = 'none';
+            protectedSection.style.display = 'block';
+            userNameDisplay.textContent = currentUser;
         } else {
-            message.style.color = "red";
-            message.textContent = "Fel användarnamn eller lösenord. Försök igen.";
+            // Om en månad har gått, logga ut användaren
+            logout();
+            message.textContent = 'Din inloggning har gått ut. Vänligen logga in igen.';
+            message.style.color = 'red';
         }
-    });
+    }
+};
 
-    // Logout button functionality
-    logoutButton.addEventListener("click", () => {
-        // Hide the protected section and show the login section
-        protectedSection.style.display = "none";
-        loginSection.style.display = "block";
-        // Optionally clear the form inputs
-        loginForm.reset();
-    });
+// Funktion för att logga in
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Förhindra att sidan laddas om
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    // Kontrollera om användaren finns och lösenordet är korrekt
+    if (users[username] && users[username].password === password) {
+        if (users[username].loggedIn) {
+            message.textContent = 'Det här kontot används redan på en annan enhet.';
+            message.style.color = 'red';
+        } else {
+            users[username].loggedIn = true;
+            users[username].device = navigator.userAgent; // Identifiera enheten
+            currentUser = username;
+
+            // Spara användarens inloggning i localStorage
+            localStorage.setItem('currentUser', username);
+            localStorage.setItem('loginTime', Date.now()); // Spara inloggningstiden
+
+            loginSection.style.display = 'none';
+            protectedSection.style.display = 'block';
+            userNameDisplay.textContent = username;
+            message.textContent = '';
+        }
+    } else {
+        message.textContent = 'Fel användarnamn eller lösenord.';
+        message.style.color = 'red';
+    }
 });
+
+// Funktion för att logga ut
+logoutButton.addEventListener('click', function() {
+    logout();
+});
+
+// Funktion för att logga ut användaren
+function logout() {
+    if (currentUser) {
+        users[currentUser].loggedIn = false;
+        users[currentUser].device = null;
+        currentUser = null;
+
+        // Ta bort användarens inloggning från localStorage
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('loginTime'); // Ta bort inloggningstiden
+
+        loginSection.style.display = 'block';
+        protectedSection.style.display = 'none';
+        message.textContent = '';
+    }
+}
