@@ -3,41 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristisk Webbplats</title>
+    <title>Security</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Välkommen till Min Futuristiska Webbplats</h1>
-    </header>
-
-    <!-- Login Section -->
-    <section id="login-section">
-        <p>Logga in med ditt användarnamn och lösenord.</p>
+    <div id="login-section">
+        <h2>Logga in</h2>
         <form id="login-form">
-            <label for="username">Användarnamn:</label>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <label for="password">Lösenord:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
+            <input type="text" id="username" placeholder="Användarnamn" required>
+            <input type="password" id="password" placeholder="Lösenord" required>
             <button type="submit">Logga in</button>
+            <p id="message"></p>
         </form>
-        <p id="message"></p>
-    </section>
-
-    <!-- Protected Content Section -->
-    <section id="protected-section" style="display: none;">
-        <h2>Välkommen till den Skyddade Sidan!</h2>
-        <p>Du har loggat in framgångsrikt.</p>
-        <p>Här är din privata information eller innehåll.</p>
-        <button id="logout-button">Logga ut</button>
-    </section>
-
-    <footer>
-        <p>Skapad av Mig | <a href="https://github.com/">GitHub</a></p>
-    </footer>
-
-    <script src="script.js"></script>
+        <footer>
+            <p>Skapad av Cash</p>
+        </footer>
+    </div>
+    <div id="protected-section">
+        <h2>Välkommen till swoosh.</h2>
+        <p>Update kommer snart.</p>
+        <button id="logout-btn">Logga ut</button>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>

@@ -1,8 +1,52 @@
+/* General Input Styling */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 20px;
+    border: 1px solid #333;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    transition: all 0.4s ease; /* Slightly slower transition for smoothness */
+    box-sizing: border-box;
+    position: relative;
+    outline: none;
+}
+
+/* Focus and Hover effect with neon outline */
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #9b59b6; /* Purple focus border */
+    outline: none;
+    box-shadow: 0 0 10px #9b59b6, 0 0 20px #9b59b6, 0 0 30px #9b59b6; /* Neon purple glow */
+}
+
+/* Button Styles */
+button {
+    background-color: #9b59b6; /* Purple button */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Add transition for box-shadow */
+    border-radius: 20px; /* Smooth rounded button */
+    padding: 12px 30px; /* Adjust padding to fit content */
+    width: auto; /* Button width adjusts to fit content */
+    margin: 10px 0; /* Add spacing around the button */
+    display: inline-block; /* Ensures button shrinks to content */
+    animation: buttonAnimation 0.5s ease-in-out; /* Add smooth button entrance animation */
+    border: none; /* Remove unwanted border */
+}
+
+/* Button hover effect with neon outline */
+button:hover {
+    background-color: #8e44ad; /* Darker purple on hover */
+    box-shadow: 0 0 10px #9b59b6, 0 0 20px #9b59b6, 0 0 30px #9b59b6; /* Neon purple glow */
+}
+
 /* General Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0f0f0f;
-    color: #fff;
+    background-color: #121212; /* Dark background for better contrast */
+    color: white;
     margin: 0;
     padding: 0;
     display: flex;
@@ -11,63 +55,24 @@ body {
     height: 100vh;
     overflow: hidden;
     flex-direction: column;
-}
-
-header {
-    background: linear-gradient(45deg, #ff6f00, #ff9100);
-    color: white;
-    text-align: center;
-    padding: 50px 20px;
-    border-radius: 8px;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 2.5rem;
-    letter-spacing: 2px;
-    font-weight: 300;
+    background: linear-gradient(135deg, rgba(128, 0, 128, 0.8), rgba(0, 0, 0, 0.7)); /* Purple and black gradient */
+    transition: background-color 0.3s ease;
 }
 
 /* Form and Login Section */
 #login-section, #protected-section {
     text-align: center;
-    max-width: 400px;
+    max-width: 350px; /* Narrower width for inputs */
     width: 90%;
-    background-color: #1d1d1d;
+    background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-}
-
-input[type="text"], input[type="password"], button {
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #333;
-    font-size: 1rem;
-    background-color: #333;
-    color: white;
-    transition: all 0.3s ease;
-}
-
-input[type="text"]:focus, input[type="password"]:focus {
-    border-color: #ff6f00;
-    outline: none;
-}
-
-button {
-    background-color: #ff6f00;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #ff9100;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    position: absolute; /* To make it float */
+    z-index: 10; /* Floating above the background */
 }
 
 /* Success and Error Messages */
@@ -82,7 +87,7 @@ button:hover {
 }
 
 #protected-section h2 {
-    color: #ff6f00;
+    color: #9b59b6; /* Purple text color */
     font-size: 2rem;
 }
 
@@ -94,40 +99,56 @@ footer {
     color: #aaa;
 }
 
-footer a {
-    color: #ff6f00;
-    text-decoration: none;
+footer p {
+    font-size: 1rem;
 }
 
-footer a:hover {
-    text-decoration: underline;
+/* Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Text Fade-In Animation for Welcome Text */
+#login-section h2 {
+    opacity: 0;
+    animation: textFadeIn 0s forwards; /* Remove delayed animation for text */
+}
+
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive Design for Mobile */
 @media (max-width: 768px) {
-    header {
-        font-size: 1.5rem;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    header {
-        padding: 40px 10px;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
     #login-section, #protected-section {
         padding: 20px;
     }
 
     button, input {
         font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #login-section, #protected-section {
+        padding: 15px;
+    }
+
+    button, input {
+        font-size: 0.8rem;
     }
 }
