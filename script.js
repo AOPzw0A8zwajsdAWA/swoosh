@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Simulate users and passwords
     const validUsers = {
         'user1': 'password1',
-        'user2': 'password2'
+        'Igor': 'Igorsson',
     };
 
     // Check if user is logged in from sessionStorage
@@ -35,11 +35,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     fakeFrejaBtn.addEventListener('click', function() {
-        alert('Fake Freja App clicked!');
+        alert('Fake Freja kommer snart!');
     });
 
     fakeSwishBtn.addEventListener('click', function() {
-        alert('Fake Swish App clicked!');
+        alert('Fake Swish kommer snart!');
     });
 
     logoutBtn.addEventListener('click', function() {
